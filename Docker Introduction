@@ -1,0 +1,82 @@
+why do you need containers
+
+->Ex: Your application needs technologies like webserver(node js), database(mysql), messaging server(rabbitmq), configuration tool(ansible)
+
+-> If i install all softwares in one server there are challenges
+
+compatibility issues (in different environments(different OS) setup is different)
+long setup time
+
+-> To overcome above challenges we need to install each component in each container ...there are many container technologies ..docker, rocket , podman, container d, AWS fatgate, Azure container services, google cloud run etc
+
+
+What is a container 
+A container is a lightweight, standalone, executable package that includes everything needed to run a piece of software: code, runtime, system tools, libraries, and settings. Containers use virtualization at the operating system level to provide isolation and consistency across different environments. Here's a detailed explanation of what a container is and how it functions:
+
+containers will share the OS kernal and run the applications
+
+conatiners
+    |
+ Docker
+    |
+   OS
+    |
+hardware
+
+
+Containers vs Virtual Machine vs physical server
+
+Performance
+Isolation
+Resource Utilization
+Scalability
+Management
+
+    Containers
+          |
+  VM  -  VM  - VM
+          | 
+         OS
+          |
+        hypervisor
+         |  
+Hardware infrastructure
+
+
+What is Docker ?
+Docker is a containerization platform that provides easy way to containerize your applications, which means, using Docker you can build container images, run the images to create containers and also push these containers to container regestries such as DockerHub
+
+
+container vs image
+
+containers are running instances of images
+
+Image is like a template which consists of set of instructions used to create containers
+
+Explain Docker Architecture
++-------------------+
+|   Docker Client   |
++---------+---------+
+          |
+          v
++-------------------+
+|   Docker Daemon   |
+|  (Docker Engine)  |
+| +---------------+ |
+| | Docker API    | |
+| +---------------+ |
+| |  Containers   | |
+| |  Images       | |
+| |  Networks     | |
+| |  Volumes      | |
+| +---------------+ |
++---------+---------+
+          |
+          v
++-------------------+
+|   Docker Host     |
++-------------------+
+
++-------------------+
+|   Docker Registry |
++-------------------+
