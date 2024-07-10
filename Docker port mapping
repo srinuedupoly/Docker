@@ -1,0 +1,86 @@
+Port mapping in Docker allows you to map ports on the host machine to ports on the Docker container. This is essential for accessing services running inside containers from the outside world.
+
+Docker Port Mapping Commands with Examples
+--------------------------------------------------
+Mapping a Single Port - To map a single port from the host to the container, use the -p flag:
+
+docker run -d -p 8080:80 --name webserver nginx
+
+This command runs an nginx container in detached mode (-d).
+The port 8080 on the host is mapped to port 80 on the container.
+The container is named webserver.
+You can access the web server on http://localhost:8080.
+--------------------------------------------------
+Mapping Multiple Ports
+
+You can map multiple ports by using the -p flag multiple times:
+
+docker run -d -p 8080:80 -p 8443:443 --name webserver nginx
+
+This command maps port 8080 on the host to port 80 on the container.
+It also maps port 8443 on the host to port 443 on the container.
+The container is named webserver.
+--------------------------------------------------
+Mapping a Range of Ports
+
+You can also map a range of ports:
+
+docker run -d -p 8000-8010:80 --name webserver nginx
+
+This maps ports 8000 to 8010 on the host to port 80 on the container.
+Each of these host ports will map to port 80 on separate instances of the container's service.
+
+--------------------------------------------------
+Binding to a Specific IP Address
+
+By default, Docker maps the port to all IP addresses on the host. You can specify a specific IP address:
+
+
+docker run -d -p 127.0.0.1:8080:80 --name webserver nginx
+
+This binds port 8080 on 127.0.0.1 (localhost) to port 80 on the container.
+Only connections to 127.0.0.1 will be forwarded to the container.
+--------------------------------------------------
+Inspecting Port Mappings
+
+To check the port mappings of a running container, use the docker port command:
+
+
+docker port webserver - This will show the port mappings for the webserver container.
+--------------------------------------------------
+Listing Ports with Docker Inspect
+
+You can also use the docker inspect command to get detailed information:
+
+
+docker inspect webserver - Look for the Ports section in the output to see the mappings.
+
+Summary
+Port mapping is a crucial feature in Docker for exposing container services to the outside world. The -p flag is used to map host ports to container ports, and you can specify single ports, multiple ports, port ranges, and even bind to specific IP addresses. Docker Compose simplifies the process by allowing port mappings to be defined in a configuration file. Using commands like docker port and docker inspect, you can verify and inspect port mappings for your containers.
+-----------------------------------
+
+RUN-port mapping
+
+docker run webapp
+docker run -p 80:5000 webapp
+
+docker run -p 8081:80 httpd  -----example
+
+# Run Nginx and map port 8080 on the host to port 80 on the container
+docker run -p 8080:80 nginx
+
+# Run Apache HTTP Server and map port 8081 on the host to port 80 on the container
+docker run -p 8081:80 httpd
+
+
+# Run Nginx with multiple port mappings
+docker run -p 8082:80 -p 8443:443 nginx
+
+# Run Apache HTTP Server and map a container port to a random port on the host
+docker run -p 80 httpd
+
+
+# Run Nginx and map a range of ports
+docker run -p 8083-8085:80 nginx
+
+-----------------------------------
