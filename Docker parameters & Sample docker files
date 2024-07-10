@@ -1,0 +1,191 @@
+In a Dockerfile, you can use various instructions and parameters to define the behavior of the image building process. Here are some commonly used instructions and parameters in a Dockerfile:
+----------------------------
+FROM: Specifies the base image for your Docker image. It's the starting point for your image.
+
+
+FROM ubuntu:20.04
+----------------------------
+WORKDIR: Sets the working directory for subsequent instructions in the Dockerfile.
+
+
+WORKDIR /usr/src/app
+----------------------------
+COPY: Copies files from the host machine to the container.
+
+
+COPY . .
+----------------------------
+RUN: Executes commands in a new layer on top of the current image and commits the results.
+
+
+RUN apt-get update && apt-get install -y curl
+----------------------------
+CMD: Provides a default command to run when the container starts. It can be overridden by specifying a command when running the container.
+
+
+CMD ["npm", "start"]
+----------------------------
+EXPOSE: Informs Docker that the container will listen on the specified network ports at runtime.
+
+
+EXPOSE 80
+----------------------------
+ENV: Sets environment variables that will be available during the build process and when running the container.
+
+
+ENV NODE_ENV=production
+----------------------------
+ARG: Defines build-time variables that users can pass at build-time to the builder with the docker build command.
+
+
+ARG version=latest
+----------------------------
+LABEL: Adds metadata to an image. This can include version information, maintainer details, etc.
+
+
+LABEL version="1.0" \
+      maintainer="yourname@example.com"
+----------------------------
+ENTRYPOINT: Configures a container that will run as an executable.
+
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
+----------------------------
+
+
+
+==============================================================================
+1. python flask sample docker file
+
+
+cat Dockerfile
+
+# Use the official Python base image
+FROM python:3.8-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the application files to the container
+COPY . .
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Expose the port the app runs on
+EXPOSE 8080
+
+# Command to run the application
+CMD ["python", "app.py"]
+
+
+---------------------------
+vi requirements.txt
+
+Flask==1.1.4
+MarkupSafe==1.1.1
+
+---------------------------
+vi app.py
+
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080)
+
+---------------------------
+
+
+docker build -t your-flask-app .
+docker run -p 8080:8080 your-flask-app
+
+
+
+==============================================================================
+
+
+Edupoly website docker container
+=================================
+
+
+mkdir edupoly
+
+git clone https://github.com/manumitsacademy/edupolydotin.git
+
+
+vi Dockerfile
+--------------------------------------------------------------------
+# Use the official Amazon Linux image as the base image
+
+FROM amazonlinux:latest
+
+
+# Update the system and install Apache
+
+RUN yum update -y && \
+
+    yum install -y httpd && \
+
+    systemctl enable httpd
+
+# Start Apache in the foreground (non-daemon mode)
+
+CMD ["/usr/sbin/httpd", "-DFOREGROUND"]
+
+# Set the ServerName directive
+
+RUN echo "ServerName localhost" >> /etc/httpd/conf/httpd.conf
+
+# Copy the HTML file into the container
+
+COPY . /var/www/html/
+
+
+# Expose port 80 to allow external access
+
+EXPOSE 80
+
+--------------------------------------------------------------------
+
+docker build . -t edupoly_website_image
+
+docker run -p 8080:80 edupoly_website_image
+
+--------------------------------------------------------------------
+
+Tag the Docker Image:
+
+Tag the image with the repository name. Replace edupoly_website_image with the actual name of your image.
+
+
+docker tag edupoly_website_image srinuedupoly/edupoly_website_image:latest
+Log in to Docker Hub:
+
+Log in to your Docker Hub account.
+
+
+docker login -u srinuedupoly
+Enter your Docker Hub password when prompted.
+
+Push the Image to Docker Hub:
+
+Push the tagged image to Docker Hub.
+
+
+docker push srinuedupoly/edupoly_website_image:latest
+
+--------------------------------------------------------------------
+
+docker pull srinuedupoly/edupoly_website_image:latest
+
+--------------------------------------------------------------------
+
+
+
+
