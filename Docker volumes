@@ -1,0 +1,121 @@
+In Docker, both bind mounts and volumes are used to persist data generated or used by Docker containers. While they serve similar purposes, they differ in implementation, flexibility, and use cases. Here’s an explanation of both along with examples:
+
+Bind Mounts:
+Bind mounts allow you to mount a file or directory from the host filesystem into a container. This method directly references a location on the host machine.
+
+Use Cases
+When you need to access and share configuration files.
+For development environments where you want to immediately see changes made to the source code on the host machine inside the container.
+
+Example
+
+docker run -d --name nginx-bind -v /path/to/local/folder:/usr/share/nginx/html nginx
+
+-d runs the container in detached mode.
+--name specifies the container name as nginx-bind.
+-v /path/to/local/folder:/usr/share/nginx/html mounts the local directory /path/to/local/folder to /usr/share/nginx/html inside the container.
+
+
+Volume Mounts:
+Volumes are managed by Docker and are stored in a part of the host filesystem which is managed by Docker (/var/lib/docker/volumes/ on Linux). Volumes are more flexible than bind mounts and provide advantages such as the ability to easily backup, restore, and transfer data between Docker hosts.
+
+Use Cases
+When you need persistent data storage that is not dependent on the lifecycle of a specific container.
+For data sharing among multiple containers.
+When you want Docker to manage the data location.
+
+Example
+Creating a Volume
+
+docker volume create myvolume 
+
+Using the Volume in a Container
+
+docker run -d --name nginx-volume -v myvolume:/usr/share/nginx/html nginx
+-d runs the container in detached mode.
+--name specifies the container name as nginx-volume.
+-v myvolume:/usr/share/nginx/html mounts the Docker-managed volume myvolume to /usr/share/nginx/html inside the container.
+
+
+Differences Between Bind Mounts and Volumes
+
+
+Management:
+
+Bind Mounts: Directly references host filesystem paths. Requires full paths.
+Volumes: Managed by Docker, stored in Docker’s storage locations. Easier to manage, backup, and migrate.
+Portability:
+
+Bind Mounts: Less portable as they depend on specific paths on the host machine.
+Volumes: More portable since Docker manages the location. Ideal for multi-host environments.
+Performance:
+
+Bind Mounts: Performance can vary depending on the filesystem.
+Volumes: Generally optimized by Docker for performance.
+Security:
+
+Bind Mounts: Less secure as they expose the host filesystem directly to the container.
+Volumes: More secure as Docker abstracts the storage location.
+
+------------------
+
+docker run jenkins/jenkins
+
+docker ps
+
+docker inspect <conatiner name/id> - To know the internal IP - networks section
+
+docker run -p 8080:8080 jenkins/jenkins
+
+
+
+docker run -p 8080:8080 -v /root/mydata:/var/jenkins_home  jenkins/jenkins
+
+docker run -p 8080:8080 -v /root/mydata:/var/jenkins_home -u root jenkins/jenkins  -- To run using root user
+
+
+create a test job
+
+stop the container
+
+docker run -p 8080:8080 -v /root/mydata:/var/jenkins_home -u root jenkins/jenkins  -- rerun 
+
+already data will be available
+---------------------------------------------------------------------
+
+bind mounting:
+
+mkdir host_config
+echo "This is a config file" > host_config/config.txt
+
+
+docker run -v $(pwd)/host_config:/container/config -it ubuntu
+
+
+cd /container/config
+ls
+
+
+echo "This is an updated config file" > host_config/config.txt
+
+
+cat /container/config/config.txt
+
+--------------------------------------------------------
+volume mounting:
+
+docker volume create my_volume
+
+docker run -v my_volume:/container/data -it ubuntu
+cd /container/data
+touch myfile.txt
+
+echo "This is a file created on the host system" > /var/lib/docker/volumes/my_volume/_data/host_file.txt
+
+
+cat /container/data/host_file.txt
+
+
+
+
+--------------------------------------------------------
