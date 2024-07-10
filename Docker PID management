@@ -1,0 +1,46 @@
+Explain docker PID management
+
+1. Namespace Isolation
+-PID Namespace
+Docker uses Linux namespaces to isolate various aspects of a container’s environment. The PID namespace is one of these namespaces, and it ensures that a container's processes are isolated from the processes running in the host system and other containers.
+
+PID Namespace: Each container runs in its own PID namespace. This means that the processes inside the container have their own unique set of PIDs, starting from 1, similar to how processes are managed on a regular Linux system. This isolation ensures that the PIDs inside one container do not interfere with or have visibility into the processes running in another container or on the host system.
+
+2. Host PID Namespace
+it may be necessary for a container to access and manage the processes running on the host system. Docker allows containers to join the host’s PID namespace using the --pid=host flag. This gives the container visibility into the host’s processes, and can be useful for debugging and monitoring purposes. However, it also reduces the level of isolation and can pose security risks.
+
+3. 	PID Limits and Control Groups
+
+Docker uses cgroups (control groups) to limit and manage resources, including PIDs, for containers. By setting PID limits, Docker ensures that a container cannot exhaust the host’s PID resources, which could otherwise lead to a denial of service on the host system.
+
+PID Limit: Docker can be configured to set a maximum number of PIDs that a container can use. This limit can be specified using the --pids-limit flag. For example, --pids-limit=100 ensures that the container cannot create more than 100 processes.
+
+
+Within a container, the process management works similarly to a regular Linux system:
+
+Init Process: The first process that starts inside a container is usually the application or a shell specified in the Dockerfile or the docker run command. This process has PID 1 inside the container’s PID namespace and acts as the init system for the container. It is responsible for reaping orphaned zombie processes.
+Process Tree: All other processes started inside the container are child processes of the init process, creating a process tree that is isolated within the container’s PID namespace.
+
+docker run --pids-limit 100 my-image
+
++-----------------------------+
+|          Host System        |
+|                             |
+| +-------------------------+ |
+| |  Container 1            | |
+| |  PID Namespace 1        | |
+| |  +-------------------+  | |
+| |  | PID 1 (init)      |  | |
+| |  | PID 2 (process)   |  | |
+| |  +-------------------+  | |
+| +-------------------------+ |
+|                             |
+| +-------------------------+ |
+| |  Container 2            | |
+| |  PID Namespace 2        | |
+| |  +-------------------+  | |
+| |  | PID 1 (init)      |  | |
+| |  | PID 2 (process)   |  | |
+| |  +-------------------+  | |
+| +-------------------------+ |
++-----------------------------+
