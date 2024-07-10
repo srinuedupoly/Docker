@@ -58,3 +58,37 @@ Logs and resource usage can be monitored with docker logs and docker stats.
 Pushing and Pulling Images:
 Images can be pushed to a remote registry using the docker push command.
 Images can be pulled from a registry using the docker pull command, enabling easy distribution and deployment.
+
+
+
++-------------------+
+|   Docker Client   |
+|-------------------|
+|                   |
+|  docker build     |
+|  docker run       |
+|  docker push/pull |
++-------------------+
+        |
+        | REST API
+        v
++-------------------+
+|   Docker Daemon   |
+|-------------------|
+|                   |
+|  Docker Engine    |
+|  - Containers     |
+|  - Images         |
+|  - Networks       |
+|  - Volumes        |
++-------------------+
+        |
+        v
++-------------------+
+|  Docker Registry  |
+|-------------------|
+|                   |
+|  Docker Hub       |
+|  Private Registry |
++-------------------+
+
