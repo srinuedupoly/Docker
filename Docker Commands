@@ -170,6 +170,26 @@ docker commit - Create a new image from a container’s changes.
 docker commit mycontainer mynewimage
 ---------------------------------------------------------
 
+
+control groups:
+		   
+		   
+
+docker run --cpus=1 my_image
+
+
+docker run --memory=512m my_image
+
+
+docker run --memory=512m --memory-swap=1g my_image
+
+
+docker run --cpu-shares=512 my_image
+
+
+docker run --cpuset-cpus="0-1" my_image
+
+
 These commands cover a wide range of Docker functionalities and should provide a solid foundation for managing Docker environments in real-time.
 
 
