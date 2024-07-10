@@ -1,0 +1,175 @@
+Docker has a wide range of commands to manage images, containers, networks, volumes, and more. Below is a comprehensive list of commonly used Docker commands along with real-time examples:
+
+Docker Image Commands
+
+docker pull  - Pull an image from a registry.
+
+docker pull ubuntu
+---------------------------------------------------------
+docker build - Build an image from a Dockerfile.
+
+docker build -t myapp:latest .
+---------------------------------------------------------
+docker images - List all images.
+
+docker images
+---------------------------------------------------------
+docker rmi - Remove an image.
+
+docker rmi myapp:latest
+---------------------------------------------------------
+docker tag - Tag an image with a new name.
+
+docker tag myapp:latest myrepo/myapp:1.0
+---------------------------------------------------------
+docker push - Push an image to a registry.
+
+docker push myrepo/myapp:1.0
+---------------------------------------------------------
+
+Docker Container Commands
+-------------------------
+docker run - Run a container from an image.
+
+docker run -d --name mycontainer -p 8080:80 nginx
+
+---------------------------------------------------------
+docker ps - List running containers.
+
+docker ps
+---------------------------------------------------------
+
+docker ps -a   ---   List all containers, including stopped ones.
+
+docker ps -a
+
+---------------------------------------------------------
+
+docker stop - Stop a running container.
+
+docker stop mycontainer
+---------------------------------------------------------
+docker start - Start a stopped container.
+
+docker start mycontainer
+---------------------------------------------------------
+docker restart - Restart a container.
+
+docker restart mycontainer
+---------------------------------------------------------
+
+docker rm - Remove a container.
+
+docker rm mycontainer
+---------------------------------------------------------
+docker exec - Run a command in a running container.
+
+docker exec -it mycontainer /bin/bash
+---------------------------------------------------------
+
+docker logs - Fetch the logs of a container.
+
+docker logs mycontainer
+
+---------------------------------------------------------
+
+Docker Network Commands
+-----------------------
+docker network ls - List all networks.
+
+docker network ls
+---------------------------------------------------------
+docker network create - Create a new network.
+
+docker network create mynetwork
+---------------------------------------------------------
+
+docker network connect - Connect a container to a network.
+
+docker network connect mynetwork mycontainer
+ ---------------------------------------------------------
+docker network disconnect - Disconnect a container from a network.
+
+docker network disconnect mynetwork mycontainer
+---------------------------------------------------------
+docker network inspect - Inspect a network.
+
+docker network inspect mynetwork
+---------------------------------------------------------
+docker network rm - Remove a network.
+
+docker network rm mynetwork
+---------------------------------------------------------
+
+Docker Volume Commands
+----------------------
+docker volume ls - List all volumes.
+
+docker volume ls
+---------------------------------------------------------
+docker volume create - Create a new volume.
+
+docker volume create myvolume
+---------------------------------------------------------
+docker volume inspect - Inspect a volume.
+
+docker volume inspect myvolume
+---------------------------------------------------------
+
+docker volume rm - Remove a volume.
+
+docker volume rm myvolume
+---------------------------------------------------------
+
+Docker System Commands
+----------------------
+docker system df - Show Docker disk usage.
+
+docker system df
+---------------------------------------------------------
+docker system prune - Remove unused data.
+
+docker system prune -a
+---------------------------------------------------------
+
+docker info  -  Display system-wide information.
+
+docker info
+---------------------------------------------------------
+
+docker version - Show the Docker version information.
+
+docker version
+
+---------------------------------------------------------
+
+
+Miscellaneous Commands
+----------------------
+docker cp - Copy files/folders between a container and the local filesystem.
+
+docker cp mycontainer:/path/to/file /local/path
+---------------------------------------------------------
+docker inspect - Return low-level information on Docker objects.
+
+docker inspect mycontainer
+---------------------------------------------------------
+
+docker stats - Display a live stream of container(s) resource usage statistics.
+
+docker stats
+---------------------------------------------------------
+
+docker top - Display the running processes of a container.
+
+docker top mycontainer
+---------------------------------------------------------
+
+docker commit - Create a new image from a container’s changes.
+
+docker commit mycontainer mynewimage
+---------------------------------------------------------
+
+These commands cover a wide range of Docker functionalities and should provide a solid foundation for managing Docker environments in real-time.
+
+
