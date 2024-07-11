@@ -1,0 +1,170 @@
+Docker networking allows containers to communicate with each other, the Docker host, and external networks. Here's an overview of Docker networking concepts and types:
+
+Docker Networking Concepts
+Container Network Model (CNM):
+Sandbox: An isolated environment where a container’s networking stack (interfaces, routing tables, DNS, etc.) is set up.
+Endpoint: A connection point that can be joined to a network.
+Network: A collection of endpoints that can communicate with each other.
+
+Docker Network Types
+---------------------
+Bridge Network (default):
+
+Default Bridge Network: Automatically created when Docker is installed. Containers on this network can communicate with each other using IP addresses.
+User-Defined Bridge Networks: Allow containers to communicate using container names. This provides better DNS resolution than the default bridge network.
+
+Host Network:
+
+Removes the network isolation between the Docker host and the container, making the container use the host’s network stack directly.
+Useful for performance reasons but has security implications since there is no network isolation.
+
+Overlay Network:
+
+Enables swarm services to communicate with each other, or standalone containers to communicate with other standalone containers or swarm services, across different Docker daemons.
+Useful for multi-host networking.
+
+Macvlan Network:
+
+Assigns a MAC address to each container, making it appear as a physical device on the network.
+Allows containers to be directly connected to the physical network.
+
+None Network:
+
+Disables all networking for a container.
+Useful for security and network namespace isolation testing.
+
+Working with Docker Networks
+-----------------------------
+Create a User-Defined Bridge Network
+
+
+docker network create my_bridge_network
+
+-----------------------------
+Run a Container on a User-Defined Network
+
+
+docker run -d --name my_container --network my_bridge_network my_image
+-----------------------------
+Inspect a Network
+
+docker network inspect my_bridge_network
+-----------------------------
+List Networks
+
+
+docker network ls
+-----------------------------
+Connect a Running Container to a Network
+
+
+docker network connect my_bridge_network my_container
+------------------------------
+Disconnect a Running Container from a Network
+
+
+docker network disconnect my_bridge_network my_container
+
+-----------------------
+1. Create 2 containers in the default bridge network
+
+docker network ls
+
+  docker run -d -it --name nginx01 -p 8081:80 nginx 
+  docker run -d -it --name nginx02 -p 8082:80 nginx
+  
+ 2. try to access one container with other it would work
+ 
+    docker exec -it nginx01 /bin/ba 
+  sudo apt install iputils-ping
+  ping <target ip>
+  
+  
+  3. Create 2 separate bridge networks
+  
+  	docker network create --driver=bridge --subnet=192.168.0.0/16 192_network
+	docker network create --driver=bridge --subnet=172.28.0.0/16 172_network
+	
+	
+  4. create a container on each network
+  
+  	docker run -it --name nginxapp01 --network 192_network -p 8083:80 nginx
+	docker run -it --name nginxapp02 --network 172_network -p 8084:80 nginx
+	
+	
+5. Try to access one container with other. it ouldn't works.
+  
+    docker exec -it nginxuat01 /bin/ba 
+  # on container]
+  apt-get update 
+  apt install net-tools 
+  apt install iputils-ping
+  ping <nginxint02_IP> 
+  
+  
+  
+  docker inspect network
+  
+  
+------------------------------------------------
+
+Create a Docker network:
+
+docker network create mynetwork
+Run the first container:
+
+
+docker run -d --name container1 --network mynetwork alpine:latest sleep infinity
+Run the second container:
+
+
+docker run -d --name container2 --network mynetwork alpine:latest sleep infinity
+Login to the first container:
+
+
+docker exec -it container1 /bin/
+Inside the first container, ping the second container:
+
+
+ping container2
+The container name (container2 in this case) can be resolved as it's on the same Docker network.
+
+-------------------------------------------------------
+create containers in differet networks and see if you can ping from one container(login) to another container
+
+  	docker network create --driver=bridge --subnet=192.168.0.0/16 192_network
+	docker network create --driver=bridge --subnet=172.28.0.0/16 172_network
+	
+	docker run -d --name container3 --network 192_network alpine:latest sleep infinity
+	docker run -d --name container4 --network 172_network alpine:latest sleep infinity
+	
+	
+-------------------------------------------------------
+
+How to establish network communication between containers which are created in different networks
+
+# Create network
+docker network create network1
+
+# Run container1 in network1
+docker run -d --name container1 --network network1 alpine:latest sleep infinity
+
+# Create network2
+docker network create network2
+
+# Run container2 in network2
+docker run -d --name container2 --network network2 alpine:latest sleep infinity
+
+
+# Link container2 to container1
+docker network connect network1 container2
+
+
+
+docker exec -it container1 /bin/
+ping container2
+
+
+or use bridge networks
+
+--------------------------------------------------
