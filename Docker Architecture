@@ -91,4 +91,3 @@ Images can be pulled from a registry using the docker pull command, enabling eas
 |  Docker Hub       |
 |  Private Registry |
 +-------------------+
-
